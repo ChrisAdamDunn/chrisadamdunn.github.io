@@ -1,6 +1,7 @@
 "use strict";
 
 window.onload = init;
+let blockQuit = false;
 
 let FPS;
 let FPSDisplay;
@@ -30,6 +31,12 @@ function init(){
 	window.addEventListener("beforeunload",quit);
 	
 	window.setTimeout(tick, 0);
+}
+
+function quit(e){
+	console.log("quit");
+	
+	if(blockQuit){e.returnValue = true;}
 }
 
 function resize(){
@@ -98,19 +105,12 @@ function rightclick(e){
 	e.stopImmediatePropagation();
 }
 
-function quit(e){
-	console.log("quit");
-	
-	let block = false;
-	if(block){e.returnValue = true;}
-}
-
 function tick(){
 	//FPS counter
 	let thisFrameTime = window.performance.now();
 	if(thisFrameTime > lastFPSTime + 1000){
 		console.log("FPS ",FPS);
-		FPSDisplay = FPS;
+		FPSDis    play = FPS;
 		FPS = 0;
 		lastFPSTime = thisFrameTime;
 	}
@@ -129,4 +129,36 @@ function tick(){
 	
 	//Setup next tick
 	window.setTimeout(tick,((thisFrameTime + FPSTargetInterval) - window.performance.now()))
+}
+
+function ontouchcancel(e){
+	console.log("touch cancel");
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function ontouchend(e){
+	console.log("touch end");
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function ontouchmove(e){
+	console.log("touch move");
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function ontouchstart(e){
+	console.log("touch start");
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
 }
