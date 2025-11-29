@@ -46,7 +46,9 @@ function init(){
 	document.addEventListener("touchmove",touchmove);
 	document.addEventListener("touchend",touchend);
 	document.addEventListener("touchcancel",touchcancel);
-	
+	document.addEventListener("gesturestart",gesturestart);
+	document.addEventListener("gesturechange",gesturechange);
+	document.addEventListener("gestureend",gestureend);
 	
 	window.setTimeout(tick, 0);
 }
@@ -215,6 +217,30 @@ function touchcancel(e){
 	touch = e.touches;
 	
 	//e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function gesturestart(e){
+	console.log("gesture start");
+
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function gesturechange(e){
+	console.log("gesture change");
+
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function gestureend(e){
+	console.log("gesture end");
+
+	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
