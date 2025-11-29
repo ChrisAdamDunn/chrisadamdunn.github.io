@@ -38,6 +38,8 @@ function init(){
 	document.addEventListener("mouseup",mouseup);
 	document.addEventListener("mousemove",mousemove);
 	document.addEventListener("wheel",mousewheel);
+	document.addEventListener("click",mouseclick);
+	document.addEventListener("dbleclick",mousedouble);
 	document.addEventListener("contextmenu",rightclick);
 
 	document.addEventListener("touchstart",touchstart);
@@ -101,8 +103,10 @@ function keydown(e){
 	console.log("keydown",e.which);
 	
 	//Dont block
-	if(e.which == 123){return;} //F12
 	if(e.which == 116){return;} //F5
+	if(e.which == 122){return;} //F11
+	if(e.which == 123){return;} //F12
+
 	
 	e.preventDefault();
 	e.stopPropagation();
@@ -148,8 +152,24 @@ function mousewheel(e){
 	console.log("mousewheel",e.deltaY);
 }
 
+function mouseclick(e){
+	console.log("click");
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+function mousedouble(e){
+	console.log("double click");
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
 function rightclick(e){
 	console.log("rightclick");
+	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
