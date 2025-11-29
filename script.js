@@ -11,6 +11,7 @@ let FPSTargetInterval;
 
 let canvas;
 let display;
+let bgColour;
 
 let mouseX,mouseY;
 
@@ -19,8 +20,10 @@ function init(){
 	FPSDisplay = 0;
 	FPSTargetInterval = 1000 / FPSTarget;
 	lastFPSTime = window.performance.now();
-	
+
+	bgColour = 0xFF0000;
 	resize();
+	
 	document.addEventListener("keydown",keydown);
 	document.addEventListener("keyup",keyup);
 	document.addEventListener("mousedown",mousedown);
@@ -110,7 +113,7 @@ function tick(){
 	let thisFrameTime = window.performance.now();
 	if(thisFrameTime > lastFPSTime + 1000){
 		console.log("FPS ",FPS);
-		FPSDis    play = FPS;
+		FPSDisplay = FPS;
 		FPS = 0;
 		lastFPSTime = thisFrameTime;
 	}
@@ -131,8 +134,21 @@ function tick(){
 	window.setTimeout(tick,((thisFrameTime + FPSTargetInterval) - window.performance.now()))
 }
 
-function ontouchcancel(e){
-	console.log("touch cancel");
+function ontouchstart(e){
+	console.log("touch start");
+	
+	bgColour = 0xAF0000;
+	
+	e.preventDefault();
+	e.stopPropagation();
+	e.stopImmediatePropagation();
+}
+
+
+function ontouchmove(e){
+	console.log("touch move");
+	
+	bgColour = 0x00FF00;
 	
 	e.preventDefault();
 	e.stopPropagation();
@@ -142,21 +158,17 @@ function ontouchcancel(e){
 function ontouchend(e){
 	console.log("touch end");
 	
-	e.preventDefault();
-	e.stopPropagation();
-	e.stopImmediatePropagation();
-}
-
-function ontouchmove(e){
-	console.log("touch move");
+	bgColour = 0x0000FF;
 	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
 
-function ontouchstart(e){
-	console.log("touch start");
+function ontouchcancel(e){
+	console.log("touch cancel");
+	
+	bgColour = 0xAAAAAA;
 	
 	e.preventDefault();
 	e.stopPropagation();
