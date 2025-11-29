@@ -122,7 +122,7 @@ function tick(){
 	//logic
 	//console.log("beat"); 
 	
-	display.fillStyle="red";
+	display.fillStyle=bgColour;
 	display.fillRect(0, 0, 999999, 999999);
 	display.fillStyle="white";
 	display.fillText(FPSDisplay,0,24);
