@@ -32,10 +32,11 @@ function init(){
 	document.addEventListener("mousemove",mousemove);
 	document.addEventListener("wheel",mousewheel);
 	document.addEventListener("contextmenu",rightclick);
-	document.addEventListener("ontouchstart",touchstart);
-	document.addEventListener("ontouchmove",touchmove);
-	document.addEventListener("ontouchend",touchend);
-	document.addEventListener("ontouchcancel",touchcancel);
+//Added in HTML instead
+//	document.addEventListener("ontouchstart",touchstart);
+//	document.addEventListener("ontouchmove",touchmove);
+//	document.addEventListener("ontouchend",touchend);
+//	document.addEventListener("ontouchcancel",touchcancel);
 	
 	
 	window.setTimeout(tick, 0);
