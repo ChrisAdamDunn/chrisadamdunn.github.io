@@ -156,6 +156,7 @@ function mousewheel(e){
 
 function mouseclick(e){
 	console.log("click");
+	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
@@ -183,7 +184,7 @@ function touchstart(e){
 	bgColour = "#AF0000";
 	touch = e.touches;
 	
-	//e.preventDefault();
+	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
@@ -194,7 +195,7 @@ function touchmove(e){
 	bgColour = "#00FF00";
 	touch = e.touches;
 	
-	//e.preventDefault();
+	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
@@ -205,7 +206,7 @@ function touchend(e){
 	bgColour = "#0000FF";
 	touch = e.touches;
 	
-	//e.preventDefault();
+//	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
@@ -216,7 +217,7 @@ function touchcancel(e){
 	bgColour = "#AAAAAA";
 	touch = e.touches;
 	
-	//e.preventDefault();
+	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
@@ -239,7 +240,7 @@ function gesturechange(e){
 
 function gestureend(e){
 	console.log("gesture end");
-
+//document.body.style.zoom = 1;
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
