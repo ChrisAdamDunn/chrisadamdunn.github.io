@@ -21,9 +21,10 @@ function init(){
 	FPSTargetInterval = 1000 / FPSTarget;
 	lastFPSTime = window.performance.now();
 
-	bgColour = 0xFF0000;
+	bgColour = "#110000";
 	resize();
 	
+	window.addEventListener("beforeunload",quit);
 	document.addEventListener("keydown",keydown);
 	document.addEventListener("keyup",keyup);
 	document.addEventListener("mousedown",mousedown);
@@ -31,7 +32,11 @@ function init(){
 	document.addEventListener("mousemove",mousemove);
 	document.addEventListener("wheel",mousewheel);
 	document.addEventListener("contextmenu",rightclick);
-	window.addEventListener("beforeunload",quit);
+	document.addEventListener("ontouchstart",touchstart);
+	document.addEventListener("ontouchmove",touchmove);
+	document.addEventListener("ontouchend",touchend);
+	document.addEventListener("ontouchcancel",touchcancel);
+	
 	
 	window.setTimeout(tick, 0);
 }
@@ -127,17 +132,17 @@ function tick(){
 	display.fillStyle="white";
 	display.fillText(FPSDisplay,0,24);
 	
-	display.fillStyle="blue";
+	display.fillStyle="#111111";
 	display.fillRect(mouseX-10,mouseY-10,20,20);
 	
 	//Setup next tick
 	window.setTimeout(tick,((thisFrameTime + FPSTargetInterval) - window.performance.now()))
 }
 
-function ontouchstart(e){
+function touchstart(e){
 	console.log("touch start");
 	
-	bgColour = 0xAF0000;
+	bgColour = "#AF0000";
 	
 	e.preventDefault();
 	e.stopPropagation();
@@ -145,30 +150,30 @@ function ontouchstart(e){
 }
 
 
-function ontouchmove(e){
+function touchmove(e){
 	console.log("touch move");
 	
-	bgColour = 0x00FF00;
+	bgColour = "#00FF00";
 	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
 
-function ontouchend(e){
+function touchend(e){
 	console.log("touch end");
 	
-	bgColour = 0x0000FF;
+	bgColour = "#0000FF";
 	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
 
-function ontouchcancel(e){
+function touchcancel(e){
 	console.log("touch cancel");
 	
-	bgColour = 0xAAAAAA;
+	bgColour = "#AAAAAA";
 	
 	e.preventDefault();
 	e.stopPropagation();
