@@ -11,6 +11,7 @@ let FPSTargetInterval;
 
 let canvas;
 let display;
+const fontSize = 13;
 let bgColour;
 
 let mouseX,mouseY;
@@ -26,7 +27,7 @@ function init(){
 	FPSTargetInterval = 1000 / FPSTarget;
 	lastFPSTime = window.performance.now();
 
-	bgColour = "#110000";
+	bgColour = "#330000";
 	resize();
 	
 	window.addEventListener("beforeunload",quit);
@@ -54,8 +55,6 @@ function init(){
 }
 
 function tick(){
-	//Blank screen
-
 	//FPS counter
 	let thisFrameTime = window.performance.now();
 	if(thisFrameTime > lastFPSTime + 1000){
@@ -69,14 +68,20 @@ function tick(){
 	//logic
 	//console.log("beat"); 
 	
+	//Blank screen	
 	display.fillStyle=bgColour;
 	display.fillRect(0, 0, 999999, 999999);
 	
+	//Render stuff
+
+	
+	//Text overlay
 	display.fillStyle="white";
-	display.fillText(FPSDisplay,0,24);
-	display.fillText(canvas.width + "x" + canvas.height ,0,48);
-	display.fillText(touch.length,0,72);
-	display.fillText("",0,100);
+	display.fillText(FPSDisplay,0,fontSize);
+	display.fillText(canvas.width + "x" + canvas.height ,0,fontSize*2);
+	display.fillText(touch.length,0,fontSize*3);
+	display.fillText(window.devicePixelRatio,0,fontSize*4);
+	display.fillText("bottom",0,canvas.height);
 	
 	display.fillStyle="#111111";
 	display.fillRect(mouseX-10,mouseY-10,20,20);
@@ -94,10 +99,15 @@ function quit(e){
 function resize(){
 	console.log("resize");
 	canvas = document.getElementById("canvas");
-	canvas.width = window.innerWidth-6;
-	canvas.height = window.innerHeight-6;
+	canvas.style.width = window.innerWidth;
+	canvas.style.height = window.innerHeight;
+	canvas.width = window.innerWidth 	 * window.devicePixelRatio;
+	canvas.height = window.innerHeight 	 * window.devicePixelRatio;
 	display = canvas.getContext("2d");
-	display.font = "24px Arial";
+	display.setTransform(1.0/window.devicePixelRatio,0,0,
+						1.0/window.devicePixelRatio,0,0);
+	display.font = fontSize +"px Arial";
+	
 	console.log(canvas.width, canvas.height);
 }
 
@@ -240,7 +250,7 @@ function gesturechange(e){
 
 function gestureend(e){
 	console.log("gesture end");
-//document.body.style.zoom = 1;
+	
 	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
