@@ -11,6 +11,7 @@ let FPSTargetInterval;
 
 let canvas;
 let display;
+let fullscreen;
 const fontSize = 13;
 let bgColour;
 
@@ -29,6 +30,7 @@ function init(){
 
 	bgColour = "#330000";
 	resize();
+	fullscreen = false;
 	
 	window.addEventListener("beforeunload",quit);
 	
@@ -101,10 +103,10 @@ function resize(){
 	canvas = document.getElementById("canvas");
 	canvas.style.width = window.innerWidth;
 	canvas.style.height = window.innerHeight;
-	canvas.width = window.innerWidth	 * window.devicePixelRatio;
-	canvas.height = window.innerHeight	* window.devicePixelRatio;
+	canvas.width = window.innerWidth	;// * window.devicePixelRatio;
+	canvas.height = window.innerHeight	;// * window.devicePixelRatio;
 	display = canvas.getContext("2d");
-	display.scale( window.devicePixelRatio, window.devicePixelRatio);
+	//display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
 	display.font = fontSize +"px Arial";
 	
 	console.log(canvas.width, canvas.height);
@@ -214,6 +216,27 @@ function touchend(e){
 	
 	bgColour = "#0000FF";
 	touch = e.touches;
+	
+	if(fullscreen){
+		console.log("exit fullscreen");
+		if(document.exitFullscreen) {
+			document.exitFullscreen();
+		}else if(document.webkitExitFullscreen) { /* Safari */
+			document.webkitExitFullscreen();
+		}else if(document.msExitFullscreen) { /* IE11 */
+			document.msExitFullscreen();
+		}
+	}else{
+		console.log("enter fullscreen");
+		if(canvas.requestFullscreen){
+			canvas.requestFullscreen();
+		}else if(canvas.webkitRequestFullscreen) { /* Safari */
+			canvas.webkitRequestFullscreen();
+		}else if(canvas.msRequestFullscreen) { /* IE11 */
+			canvas.msRequestFullscreen();
+		}
+	}
+	fullscreen = !fullscreen;
 	
 //	e.preventDefault();
 	e.stopPropagation();
