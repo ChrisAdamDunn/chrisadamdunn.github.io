@@ -114,10 +114,10 @@ function resize(){
 	canvas = document.getElementById("canvas");
 	canvas.style.width = window.innerWidth;
 	canvas.style.height = window.innerHeight;
-	canvas.width = window.innerWidth	;// * window.devicePixelRatio;
-	canvas.height = window.innerHeight	;// * window.devicePixelRatio;
+	canvas.width = window.innerWidth	* window.devicePixelRatio;
+	canvas.height = window.innerHeight	* window.devicePixelRatio;
 	display = canvas.getContext("2d");
-	//display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
+	display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
 	display.font = fontSize +"px Arial";
 	
 	console.log(canvas.width, canvas.height);
