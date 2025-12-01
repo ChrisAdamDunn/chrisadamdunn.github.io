@@ -11,9 +11,13 @@ let FPSTargetInterval;
 
 let canvas;
 let display;
-let fullscreen;
 const fontSize = 13;
 let bgColour;
+let fullscreen;
+
+let image;
+
+let keyboard = [];
 
 let mouseX,mouseY;
 
@@ -28,9 +32,12 @@ function init(){
 	FPSTargetInterval = 1000 / FPSTarget;
 	lastFPSTime = window.performance.now();
 
-	bgColour = "#330000";
 	resize();
+	bgColour = "#330000"
 	fullscreen = false;
+	
+	image = new Image();
+	image.src = "test.bmp";
 	
 	window.addEventListener("beforeunload",quit);
 	
@@ -56,8 +63,14 @@ function init(){
 	window.setTimeout(tick, 0);
 }
 
+function quit(e){
+	console.log("quit");
+	
+	if(blockQuit){e.returnValue = true;}
+}
+
 function tick(){
-	//FPS counter
+	//FPS counter logic
 	let thisFrameTime = window.performance.now();
 	if(thisFrameTime > lastFPSTime + 1000){
 		console.log("FPS ",FPS);
@@ -70,12 +83,18 @@ function tick(){
 	//logic
 	//console.log("beat"); 
 	
+	draw();
+	
+	//Setup next tick
+	window.setTimeout(tick,((thisFrameTime + FPSTargetInterval) - window.performance.now()))
+}
+
+function draw(){
 	//Blank screen	
 	display.fillStyle=bgColour;
 	display.fillRect(0, 0, 999999, 999999);
 	
-	//Render stuff
-
+	display.drawImage(image,100,100);
 	
 	//Text overlay
 	display.fillStyle="white";
@@ -85,17 +104,9 @@ function tick(){
 	display.fillText(window.devicePixelRatio,0,fontSize*4);
 	display.fillText("bottom",0,canvas.height);
 	
+	//track cursor
 	display.fillStyle="#111111";
 	display.fillRect(mouseX-10,mouseY-10,20,20);
-	
-	//Setup next tick
-	window.setTimeout(tick,((thisFrameTime + FPSTargetInterval) - window.performance.now()))
-}
-
-function quit(e){
-	console.log("quit");
-	
-	if(blockQuit){e.returnValue = true;}
 }
 
 function resize(){
@@ -110,6 +121,29 @@ function resize(){
 	display.font = fontSize +"px Arial";
 	
 	console.log(canvas.width, canvas.height);
+}
+
+function toggleFullscreen(){
+	if(fullscreen){
+		console.log("exit fullscreen");
+		if(document.exitFullscreen) {
+			document.exitFullscreen();
+		}else if(document.webkitExitFullscreen) { /* Safari */
+			document.webkitExitFullscreen();
+		}else if(document.msExitFullscreen) { /* IE11 */
+			document.msExitFullscreen();
+		}
+	}else{
+		console.log("enter fullscreen");
+		if(canvas.requestFullscreen){
+			canvas.requestFullscreen();
+		}else if(canvas.webkitRequestFullscreen) { /* Safari */
+			canvas.webkitRequestFullscreen();
+		}else if(canvas.msRequestFullscreen) { /* IE11 */
+			canvas.msRequestFullscreen();
+		}
+	}
+	fullscreen = !fullscreen;
 }
 
 function keydown(e){
@@ -217,26 +251,7 @@ function touchend(e){
 	bgColour = "#0000FF";
 	touch = e.touches;
 	
-	if(fullscreen){
-		console.log("exit fullscreen");
-		if(document.exitFullscreen) {
-			document.exitFullscreen();
-		}else if(document.webkitExitFullscreen) { /* Safari */
-			document.webkitExitFullscreen();
-		}else if(document.msExitFullscreen) { /* IE11 */
-			document.msExitFullscreen();
-		}
-	}else{
-		console.log("enter fullscreen");
-		if(canvas.requestFullscreen){
-			canvas.requestFullscreen();
-		}else if(canvas.webkitRequestFullscreen) { /* Safari */
-			canvas.webkitRequestFullscreen();
-		}else if(canvas.msRequestFullscreen) { /* IE11 */
-			canvas.msRequestFullscreen();
-		}
-	}
-	fullscreen = !fullscreen;
+	toggleFullscreen();
 	
 //	e.preventDefault();
 	e.stopPropagation();
