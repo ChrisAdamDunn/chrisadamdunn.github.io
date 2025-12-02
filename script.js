@@ -16,6 +16,7 @@ let bgColour;
 let fullscreen;
 
 let image;
+let alphaImage;
 
 let keyboard = [];
 
@@ -25,6 +26,60 @@ let touch = [];
 // touch[i].identifier
 // touch[i].clientX
 // touch[i].clientY
+
+class clsButton {
+	constructor(label = "", x = 0, y = 0, w = 50, h = 50) {
+		this.label = label;
+		this.x = x; this.y = y;
+		this.w = w; this.h = h;
+		this.down = 0; this.up = 0; this.held = 0;
+		this.keycode = 0;
+	}
+}
+
+class clsUI{
+	constructor(){
+		console.log("ui constructor");
+		
+		this.button = [];
+	}
+	
+	hitTest(x,y){
+		for(let i = 0; i < this.button.length; i++){
+			if(x < this.button[i].x){continue;}
+			if(y < this.button[i].y){continue;}
+			if(x > this.button[i].x+this.button[i].w){continue;}
+			if(y > this.button[i].y+this.button[i].h){continue;}
+			return this.button[i];
+		}
+		return null;
+	}
+	
+	draw(){
+		//Buttons
+		for(let i = 0; i < this.button.length; i++){
+			const btn = this.button[i];
+			
+			// Draw button background
+			display.fillStyle = "#C0C0F0";
+			display.fillRect(btn.x, btn.y, btn.w, btn.h);
+			
+			// Draw button border
+			display.strokeStyle = "#FFFFFF";
+			display.lineWidth = 3;
+			display.strokeRect(btn.x, btn.y, btn.w, btn.h);
+			
+			// Draw label centered
+			display.fillStyle = "#000000";
+			display.textAlign = "center";
+			display.textBaseline = "middle";
+			const centerX = btn.x + btn.w / 2;
+			const centerY = btn.y + btn.h / 2;
+			display.fillText(btn.label, centerX, centerY);
+		}
+	}
+}
+let ui = new clsUI;
 
 function init(){
 	FPS = 0;
@@ -36,8 +91,13 @@ function init(){
 	bgColour = "#330000"
 	fullscreen = false;
 	
+	ui.button.push(new clsButton("Fullscreen",(canvas.width/2)-50,0,100,20));
+	ui.button[ui.button.length-1].up = toggleFullscreen;
+	
 	image = new Image();
+	alphaImage = new Image();
 	image.src = "test.bmp";
+	alphaImage.src = "alpha.png";
 	
 	window.addEventListener("beforeunload",quit);
 	
@@ -95,13 +155,18 @@ function draw(){
 	display.fillRect(0, 0, 999999, 999999);
 	
 	display.drawImage(image,100,100);
+	display.drawImage(alphaImage,132,164);
+	
+	ui.draw();
 	
 	//Text overlay
+	display.textAlign = "left";
+	display.textBaseline = "top";
 	display.fillStyle="white";
-	display.fillText(FPSDisplay,0,fontSize);
-	display.fillText(canvas.width + "x" + canvas.height ,0,fontSize*2);
-	display.fillText(touch.length,0,fontSize*3);
-	display.fillText(window.devicePixelRatio,0,fontSize*4);
+	display.fillText(FPSDisplay,0,0);
+	display.fillText(canvas.width + "x" + canvas.height ,0,fontSize);
+	display.fillText(touch.length,0,fontSize*2);
+	display.fillText(window.devicePixelRatio,0,fontSize*3);
 	display.fillText("bottom",0,canvas.height);
 	
 	//track cursor
@@ -114,10 +179,10 @@ function resize(){
 	canvas = document.getElementById("canvas");
 	canvas.style.width = window.innerWidth;
 	canvas.style.height = window.innerHeight;
-	canvas.width = window.innerWidth	* window.devicePixelRatio;
-	canvas.height = window.innerHeight	* window.devicePixelRatio;
+	canvas.width = window.innerWidth	;//* window.devicePixelRatio;
+	canvas.height = window.innerHeight	;//* window.devicePixelRatio;
 	display = canvas.getContext("2d");
-	display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
+	//display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
 	display.font = fontSize +"px Arial";
 	
 	console.log(canvas.width, canvas.height);
@@ -178,6 +243,9 @@ function mousedown(e){
 
 function mouseup(e){
 	console.log("mouseup");
+	
+	const btn = ui.hitTest(e.clientX,e.clientY);
+	if(btn){if(btn.up){btn.up();}}
 	
 	e.preventDefault();
 	e.stopPropagation();
@@ -251,9 +319,12 @@ function touchend(e){
 	bgColour = "#0000FF";
 	touch = e.touches;
 	
-	toggleFullscreen();
+	for(let i = 0; i < e.changedTouches.length; i++){
+		const btn = ui.hitTest(e.changedTouches[i].clientX,e.changedTouches[i].clientY);
+		if(btn){if(btn.up){btn.up();}}
+	}
 	
-//	e.preventDefault();
+	e.preventDefault();
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
@@ -292,3 +363,5 @@ function gestureend(e){
 	e.stopPropagation();
 	e.stopImmediatePropagation();
 }
+
+
