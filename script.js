@@ -15,7 +15,7 @@ const fontSize = 13;
 let bgColour;
 let fullscreen;
 
-let image;
+let image, imageX, imageY;
 let alphaImage;
 
 let keyboard = [];
@@ -28,7 +28,7 @@ let touch = [];
 // touch[i].clientY
 
 class clsButton {
-	constructor(label = "", x = 0, y = 0, w = 50, h = 50) {
+	constructor(label = "", x = 0, y = 0, w = 30, h = 30) {
 		this.label = label;
 		this.x = x; this.y = y;
 		this.w = w; this.h = h;
@@ -42,6 +42,10 @@ class clsUI{
 		console.log("ui constructor");
 		
 		this.button = [];
+	}
+	
+	resize(){
+	
 	}
 	
 	hitTest(x,y){
@@ -91,13 +95,36 @@ function init(){
 	bgColour = "#330000"
 	fullscreen = false;
 	
-	ui.button.push(new clsButton("Fullscreen",(canvas.width/2)-50,0,100,20));
-	ui.button[ui.button.length-1].up = toggleFullscreen;
+	ui.button.push(new clsButton("Fullscreen",(canvas.width/2)-50,0,100,30));
+		ui.button[ui.button.length-1].up = toggleFullscreen;
+	ui.button.push(new clsButton("W",32,(canvas.height/2)-32,30,30));
+		ui.button[ui.button.length-1].keycode = 87;
+		ui.button[ui.button.length-1].down = function(){keyboard[87] = 1;};
+		ui.button[ui.button.length-1].held = function(){keyboard[87] = 1;};
+		ui.button[ui.button.length-1].up = function(){keyboard[87] = 0;};
+	ui.button.push(new clsButton("A",0,(canvas.height/2),30,30));
+		ui.button[ui.button.length-1].keycode = 65;
+		ui.button[ui.button.length-1].down = function(){keyboard[65] = 1;};
+		ui.button[ui.button.length-1].held = function(){keyboard[65] = 1;};
+		ui.button[ui.button.length-1].up = function(){keyboard[65] = 0;};
+	ui.button.push(new clsButton("S",32,(canvas.height/2),30,30));
+		ui.button[ui.button.length-1].keycode = 83;
+		ui.button[ui.button.length-1].down = function(){keyboard[83] = 1;};
+		ui.button[ui.button.length-1].held = function(){keyboard[83] = 1;};
+		ui.button[ui.button.length-1].up = function(){keyboard[83] = 0;};
+	ui.button.push(new clsButton("D",64,(canvas.height/2),30,30));
+		ui.button[ui.button.length-1].keycode = 68;
+		ui.button[ui.button.length-1].down = function(){keyboard[68] = 1;};
+		ui.button[ui.button.length-1].held = function(){keyboard[68] = 1;};
+		ui.button[ui.button.length-1].up = function(){keyboard[68] = 0;};
+		
 	
 	image = new Image();
 	alphaImage = new Image();
 	image.src = "test.bmp";
 	alphaImage.src = "alpha.png";
+	imageX = canvas.width/2;
+	imageY = canvas.height/2;
 	
 	window.addEventListener("beforeunload",quit);
 	
@@ -142,6 +169,7 @@ function tick(){
 	
 	//logic
 	//console.log("beat"); 
+	//ui.button[1].hold();
 	
 	draw();
 	
@@ -154,7 +182,7 @@ function draw(){
 	display.fillStyle=bgColour;
 	display.fillRect(0, 0, 999999, 999999);
 	
-	display.drawImage(image,100,100);
+	display.drawImage(image,imageX,imageY);
 	display.drawImage(alphaImage,132,164);
 	
 	ui.draw();
@@ -167,7 +195,7 @@ function draw(){
 	display.fillText(canvas.width + "x" + canvas.height ,0,fontSize);
 	display.fillText(touch.length,0,fontSize*2);
 	display.fillText(window.devicePixelRatio,0,fontSize*3);
-	display.fillText("bottom",0,canvas.height);
+	display.fillText("bottom",0,canvas.height-fontSize);
 	
 	//track cursor
 	display.fillStyle="#111111";
@@ -184,6 +212,8 @@ function resize(){
 	display = canvas.getContext("2d");
 	//display.scale( 1/window.devicePixelRatio,1/window.devicePixelRatio);
 	display.font = fontSize +"px Arial";
+	
+	ui.resize();
 	
 	console.log(canvas.width, canvas.height);
 }
@@ -219,6 +249,7 @@ function keydown(e){
 	if(e.which == 122){return;} //F11
 	if(e.which == 123){return;} //F12
 
+	keyboard[e.which] = 1;
 	
 	e.preventDefault();
 	e.stopPropagation();
@@ -227,6 +258,8 @@ function keydown(e){
 
 function keyup(e){
 	console.log("keyup",e.which);
+	
+	keyboard[e.which] = 0;
 	
 	e.preventDefault();
 	e.stopPropagation();
